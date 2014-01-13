@@ -25,15 +25,17 @@ package remctl
 
 // Cheerfully stolen from https://groups.google.com/forum/#!topic/golang-nuts/pQueMFdY0mk 
 static char** makeCharArray( int size ) {
-    return calloc( sizeof(char*), size );
+    // We need to hold 'size' character arrays, and 
+    // null terminate the last entry for the remctl library
+
+    char** a = calloc( sizeof(char*), size + 1 );
+    a[size] = NULL;
+
+    return a;
 }
 
 static void setArrayString( char **a, char *s, int n ) {
     a[n] = s;
-}
-
-static void setArrayNull( char **a, int n ) {
-    a[n] = NULL;
 }
 
 static void freeCharArray( char **a, int size ) {
@@ -85,7 +87,6 @@ func Remctl( host string, port uint16, principal string, command []string ) ( *R
     for i, s := range command {
 	C.setArrayString( command_c, C.CString( s ), C.int( i ))
     }
-    C.setArrayNull( command_c, C.int( command_len ))
 
     res, err := C.remctl( host_c, C.ushort( port ), principal_c, command_c )
 
