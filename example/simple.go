@@ -52,7 +52,7 @@ func main() {
 	host = hostparts[0]
     }
 
-    result, err := remctl.Remctl( host, port, princ, args[1:] )
+    result, err := remctl.Simple( host, port, princ, args[1:] )
 
     if err != nil {
 	fmt.Println( err )

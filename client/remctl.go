@@ -65,10 +65,13 @@ type RemctlResult struct {
     Status  int
 }
 
-// Remctl is the 'simple' interface.
+// Simple is the 'simple' interface.
 //  If port is 0, the default remctl port is used
 //  If principal is "", the default principal of "host/<hostname>" is used
-func Remctl( host string, port uint16, principal string, command []string ) ( *RemctlResult, error ) {
+//
+// For more control of how the call is made, use the more 'complex'
+// interface.
+func Simple( host string, port uint16, principal string, command []string ) ( *RemctlResult, error ) {
     var res *C.struct_remctl_result
 
     host_c := C.CString( host )
