@@ -264,6 +264,8 @@ func (r *remctl) Open( host string, port uint16, principal string ) ( error ) {
 	return r.get_error()
     }
 
+    r.open = true
+
     return nil
 }
 
