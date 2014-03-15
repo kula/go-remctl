@@ -119,12 +119,12 @@ func Simple( host string, port uint16, principal string, command []string ) ( *R
 type Command []string
 
 type Output struct {
-    Data *string
+    Data string
     Stream int
 }
 
 type Error struct {
-    Data *string
+    Data string
     Code int
 }
 
@@ -311,7 +311,7 @@ func (r *remctl) Execute( cmd Command ) (error) {
 	    if output == nil {
 		error_msg := Error{}
 		err_txt := fmt.Sprintf( "%s", r.get_error())
-		error_msg.Data = &err_txt
+		error_msg.Data = err_txt
 		error_msg.Code = ERROR_NOCODE   // We fake this here
 		r.Error <- error_msg
 		// And we're done
@@ -322,7 +322,7 @@ func (r *remctl) Execute( cmd Command ) (error) {
 	    case REMCTL_OUT_OUTPUT:
 		output_msg := Output{}
 		data := C.GoStringN( output.data, C.int(output.length))
-		output_msg.Data = &data
+		output_msg.Data = data
 		output_msg.Stream = int( output.stream )
 		r.Output <- output_msg
 	    case REMCTL_OUT_STATUS:
@@ -331,7 +331,7 @@ func (r *remctl) Execute( cmd Command ) (error) {
 	    case REMCTL_OUT_ERROR:
 		error_msg := Error{}
 		data := C.GoStringN( output.data, C.int(output.length ))
-		error_msg.Data = &data
+		error_msg.Data = data
 		error_msg.Code = int( output.error )
 		r.Error <- error_msg
 		return
