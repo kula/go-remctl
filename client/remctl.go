@@ -298,7 +298,7 @@ func (r *remctl) Execute( cmd Command ) (error) {
 	iov[n].iov_len = C.size_t(len(v))
     }
 
-    if sent := C.remctl_commandv( r.ctx, &iov[0], C.size_t(len(cmd))); sent == 1 {
+    if sent := C.remctl_commandv( r.ctx, &iov[0], C.size_t(len(cmd))); sent != 1 {
 	// It failed, return an error
 	return r.get_error()
     }
