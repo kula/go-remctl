@@ -227,6 +227,18 @@ func (r *remctl) Setccache( ccache string ) ( error ) {
     return nil
 }
 
+// SetTimeout allows you to set the network timeout in seconds, which may be
+// 0 to not use any timeout (the default).
+func (r *remctl) SetTimeout(timeout uint) error {
+	timeout_c := C.long(timeout)
+
+	if set := C.remctl_set_timeout(r.ctx, timeout_c); set != 1 {
+		return r.get_error()
+	}
+
+	return nil
+}
+
 // Close() the remctl connection after you are done with it
 // 
 // After calling, the struct is useless and should be deleted

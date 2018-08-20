@@ -21,8 +21,10 @@ func main() {
 
     var host, princ string
     var port uint16
+    var timeout uint
 
     flag.StringVar( &princ, "s", "", "remctl service principal (default host/<hostname>)" )
+    flag.UintVar(&timeout, "t", 0, "timeout in seconds. Defaults to zero")
     flag.Parse()
 
     args := flag.Args()
@@ -57,6 +59,13 @@ func main() {
 	fmt.Println( err )
 	os.Exit( 1 )
     }
+
+	if timeout > 0 {
+		if err := remc.SetTimeout(timeout); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
 
     if err := remc.Open( host, port, princ ); err != nil {
 	fmt.Println( err )
